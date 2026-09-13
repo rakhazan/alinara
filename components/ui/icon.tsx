@@ -1,32 +1,32 @@
-import { Size } from "@/lib/types";
-import { HugeiconsIcon, IconSvgElement } from "@hugeicons/react";
+import { cva, type VariantProps } from "class-variance-authority";
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react";
+import { cn } from "@/lib/utils";
 
-type HIconProps = {
+export const iconVariants = cva("", {
+  variants: {
+    size: {
+      sm: "size-4",
+      md: "size-6",
+      lg: "size-8",
+    },
+  },
+  defaultVariants: {
+    size: "md",
+  },
+});
+
+export type HIconProps = VariantProps<typeof iconVariants> & {
   className?: string;
   icon: IconSvgElement;
-  size?: Size;
   color?: string;
   stroke?: number;
 };
 
-export const HIcon = ({
-  icon,
-  size = "md",
-  className,
-  color,
-  stroke,
-}: HIconProps) => {
-  const iconSize: Record<Size, number> = {
-    sm: 16,
-    md: 24,
-    lg: 32,
-  };
-
+export const HIcon = ({ icon, size, className, color, stroke }: HIconProps) => {
   return (
     <HugeiconsIcon
-      className={className}
+      className={cn(iconVariants({ size }), className)}
       icon={icon}
-      size={iconSize[size] || 24}
       color={color || "currentColor"}
       strokeWidth={stroke || 1}
     />

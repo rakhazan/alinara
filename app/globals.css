@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: var(--color-surface);
+  --foreground: var(--color-on-background);
 }
 
 @theme inline {
@@ -13,6 +13,60 @@
 }
 
 @theme {
+  --color-surface: #fcf9f4;
+  --color-surface-dim: #dcdad5;
+  --color-surface-bright: #fcf9f4;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f6f3ee;
+  --color-surface-container: #f0ede9;
+  --color-surface-container-high: #ebe8e3;
+  --color-surface-container-highest: #e5e2dd;
+  --color-on-surface: #1c1c19;
+  --color-on-surface-variant: #4e4542;
+  --color-inverse-surface: #31302d;
+  --color-inverse-on-surface: #f3f0eb;
+  --color-outline: #807572;
+  --color-outline-variant: #d1c4c0;
+  --color-surface-tint: #665c5a;
+  --color-primary: #16110f;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #2c2523;
+  --color-on-primary-container: #968b88;
+  --color-inverse-primary: #d0c4c0;
+  --color-secondary: #725b38;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #fedeb2;
+  --color-on-secondary-container: #78603e;
+  --color-tertiary: #210c00;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #3b2009;
+  --color-on-tertiary-container: #af8566;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-primary-fixed: #ede0dc;
+  --color-primary-fixed-dim: #d0c4c0;
+  --color-on-primary-fixed: #211a18;
+  --color-on-primary-fixed-variant: #4d4543;
+  --color-secondary-fixed: #fedeb2;
+  --color-secondary-fixed-dim: #e0c298;
+  --color-on-secondary-fixed: #281800;
+  --color-on-secondary-fixed-variant: #584323;
+  --color-tertiary-fixed: #ffdcc4;
+  --color-tertiary-fixed-dim: #edbd9b;
+  --color-on-tertiary-fixed: #2e1502;
+  --color-on-tertiary-fixed-variant: #603f26;
+  --color-on-background: #1c1c19;
+  --color-surface-variant: #e5e2dd;
+
+  /* Editorial accents supplement the semantic palette above. */
+  --color-espresso: #2c2523;
+  --color-champagne: #c5a880;
+  --color-terracotta: #a37a5c;
+  --color-ivory: #faf7f2;
+  --color-warm-taupe: #8c827a;
+
   --animate-marquee: marquee 25s linear infinite;
 
   @keyframes marquee {
@@ -23,13 +77,6 @@
     to {
       transform: translateX(-50%);
     }
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
   }
 }
 

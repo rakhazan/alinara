@@ -1,3 +1,5 @@
+"use client";
+
 import {
   HeartIcon,
   HelpCircleIcon,
@@ -6,7 +8,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import Logo from "../ui/logo";
 import { HIcon } from "../ui/icon";
-import { isMobile } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 
 const RunningText = () => {
   const content = (
@@ -44,6 +46,7 @@ const RunningText = () => {
 };
 
 const Navbar = () => {
+  const mobile = useIsMobile();
   return (
     <>
       <div className="bg-foreground text-background flex items-center justify-between gap-4 px-4 lg:px-8 py-2 uppercase text-xs overflow-hidden">
@@ -60,20 +63,20 @@ const Navbar = () => {
         <div className="flex items-center justify-between gap-8 relative">
           <HIcon
             icon={PanelLeftIcon}
-            size={isMobile() ? "sm" : "md"}
             color="currentColor"
+            className={mobile ? "size-5" : "size-6"}
           />
           <Logo className="absolute -translate-x-1/2 left-1/2" />
-          <div className="flex items-center gap-6 lg:gap-8">
+          <div className="flex items-center gap-4 lg:gap-8">
             <HIcon
               icon={HeartIcon}
-              size={isMobile() ? "sm" : "md"}
               color="currentColor"
+              className={mobile ? "size-5" : "size-6"}
             />
             <HIcon
               icon={ShoppingBasket01Icon}
-              size={isMobile() ? "sm" : "md"}
               color="currentColor"
+              className={mobile ? "size-5" : "size-6"}
             />
           </div>
         </div>
