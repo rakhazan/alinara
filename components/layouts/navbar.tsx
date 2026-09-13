@@ -45,7 +45,7 @@ const RunningText = () => {
 
 const Navbar = () => {
   return (
-    <header className="">
+    <>
       <div className="bg-foreground text-background flex items-center justify-between gap-4 px-4 lg:px-8 py-2 uppercase text-xs overflow-hidden">
         <RunningText />
         <div className="hidden lg:flex items-center gap-4 font-semibold">
@@ -56,8 +56,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="px-4 lg:px-8 py-6 bg-background text-foreground relative">
-        <div className="flex items-center justify-between gap-8">
+      <header className="sticky top-0 z-50 px-4 lg:px-8 py-6 bg-background text-foreground">
+        <div className="flex items-center justify-between gap-8 relative">
           <HIcon
             icon={PanelLeftIcon}
             size={isMobile() ? "sm" : "md"}
@@ -77,8 +77,8 @@ const Navbar = () => {
             />
           </div>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 };
 
