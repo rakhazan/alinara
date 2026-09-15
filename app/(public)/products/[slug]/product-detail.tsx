@@ -1,5 +1,6 @@
 "use client";
 
+import { useCart } from "@/hooks/use-cart";
 import { useState } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/button";
@@ -9,6 +10,8 @@ import type { PopularProduct } from "../../_components/sections/popular-products
 const currency = new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 });
 
 export default function ProductDetail({ product }: { product: PopularProduct }) {
+  const { add } = useCart();
+  const [cartMessage, setCartMessage] = useState("");
   const [colorIndex, setColorIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [imageIndex, setImageIndex] = useState(0);
@@ -44,8 +47,9 @@ export default function ProductDetail({ product }: { product: PopularProduct }) 
           <div><p className="mb-2 text-sm">Jumlah</p><div className="flex items-center rounded-lg border border-outline-variant"><Button variant="ghost" size="icon" disabled={quantity <= 1} onClick={() => setQuantity(quantity - 1)} aria-label="Kurangi jumlah">−</Button><output className="min-w-10 text-center" aria-live="polite">{quantity}</output><Button variant="ghost" size="icon" disabled={quantity >= 99} onClick={() => setQuantity(quantity + 1)} aria-label="Tambah jumlah">+</Button></div></div>
           <p className="text-right text-sm text-on-surface-variant">Subtotal<span className="mt-2 block text-xl font-semibold text-primary">{currency.format(product.price * quantity)}</span></p>
         </div>
-        <div className="mt-6 flex gap-3"><Button size="lg" disabled className="flex-1" aria-describedby="purchase-status">Tambah ke Keranjang</Button><Button variant="outline" size="icon" className="size-12 rounded-sm text-2xl" aria-label="Favoritkan produk" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}>{favorite ? "♥" : "♡"}</Button></div>
-        <p id="purchase-status" className="mt-3 text-xs leading-relaxed text-on-surface-variant">Pembelian belum tersedia. Foto, harga, dan ulasan pada halaman ini merupakan data contoh.</p>
+        <div className="mt-6 flex gap-3"><Button size="lg" disabled={!color} onClick={() => setCartMessage(add(product.id, color.name, quantity) ? "Produk ditambahkan ke keranjang." : "Gagal menyimpan keranjang. Periksa izin penyimpanan browser.")} className="flex-1" aria-describedby="purchase-status">Tambah ke Keranjang</Button><Button variant="outline" size="icon" className="size-12 rounded-sm text-2xl" aria-label="Favoritkan produk" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}>{favorite ? "♥" : "♡"}</Button></div>
+        <p role="status" className="mt-3 text-sm">{cartMessage}</p>
+        <p id="purchase-status" className="mt-3 text-xs leading-relaxed text-on-surface-variant">Checkout belum tersedia. Foto, harga, dan ulasan pada halaman ini merupakan data contoh.</p>
         <div className="mt-8 divide-y divide-outline-variant border-y border-outline-variant">
           {[{ title: "Detail Produk", text: `${product.title} tersedia dalam ${product.colors.length} pilihan warna. Informasi bahan dan ukuran akan dilengkapi pada katalog resmi.` }, { title: "Panduan Perawatan", text: "Ikuti petunjuk pada label produk. Panduan perawatan khusus bahan akan tersedia bersama spesifikasi produk." }, { title: "Pengiriman & Pengembalian", text: "Pilihan pengiriman, estimasi waktu, dan ketentuan pengembalian akan tersedia saat layanan pembelian dibuka." }].map((item) => <details key={item.title} className="py-5"><summary className="cursor-pointer text-sm font-semibold">{item.title}</summary><p className="mt-3 text-sm leading-relaxed text-on-surface-variant">{item.text}</p></details>)}
         </div>

@@ -3,8 +3,8 @@
 import {
   HeartIcon,
   HelpCircleIcon,
-  ShoppingBasket01Icon,
 } from "@hugeicons/core-free-icons";
+import CartPopup from "./cart-popup";
 import Sidebar from "./sidebar";
 import Logo from "../ui/logo";
 import { HIcon } from "../ui/icon";
@@ -69,11 +69,7 @@ const Navbar = () => {
               color="currentColor"
               className={mobile ? "size-5" : "size-6"}
             />
-            <HIcon
-              icon={ShoppingBasket01Icon}
-              color="currentColor"
-              className={mobile ? "size-5" : "size-6"}
-            />
+            <CartPopup />
           </div>
         </div>
       </header>

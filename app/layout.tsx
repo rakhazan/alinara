@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Kalnia } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layouts/navbar";
-import Footer from "@/components/layouts/footer";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -27,9 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${montserrat.variable} ${kalnia.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col relative">
-        <Navbar />
-        <main className="grow">{children}</main>
-        <Footer />
+        {children}
       </body>
     </html>
   );
