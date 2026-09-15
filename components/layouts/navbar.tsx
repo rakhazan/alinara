@@ -3,9 +3,9 @@
 import {
   HeartIcon,
   HelpCircleIcon,
-  PanelLeftIcon,
   ShoppingBasket01Icon,
 } from "@hugeicons/core-free-icons";
+import Sidebar from "./sidebar";
 import Logo from "../ui/logo";
 import { HIcon } from "../ui/icon";
 import { useIsMobile } from "@/hooks/use-is-mobile";
@@ -61,11 +61,7 @@ const Navbar = () => {
 
       <header className="sticky top-0 z-50 px-4 lg:px-8 py-6 bg-background text-foreground">
         <div className="flex items-center justify-between gap-8 relative">
-          <HIcon
-            icon={PanelLeftIcon}
-            color="currentColor"
-            className={mobile ? "size-5" : "size-6"}
-          />
+          <Sidebar />
           <Logo className="absolute -translate-x-1/2 left-1/2" />
           <div className="flex items-center gap-4 lg:gap-8">
             <HIcon
