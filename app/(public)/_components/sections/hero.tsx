@@ -1,5 +1,6 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
 import { useEffect, useState } from "react";
 import { getImageProps } from "next/image";
 import Link from "next/link";
@@ -15,6 +16,7 @@ export type HeroSlide = {
 };
 
 export default function Hero({ slides }: { slides: HeroSlide[] }) {
+  const reducedMotion = useReducedMotion();
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -85,7 +87,11 @@ export default function Hero({ slides }: { slides: HeroSlide[] }) {
                   />
                 </picture>
                 <div className="absolute inset-0 bg-linear-to-r from-black/65 to-black/20" />
-                <div className="relative mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-6 py-24 lg:min-h-[640px] lg:px-16">
+                <motion.div
+                  initial={false}
+                  animate={{ opacity: index === selectedIndex ? 1 : 0, y: index === selectedIndex || reducedMotion ? 0 : 18 }}
+                  transition={{ duration: reducedMotion ? 0 : 0.55 }}
+                  className="relative mx-auto flex min-h-[560px] max-w-7xl flex-col justify-center px-6 py-24 lg:min-h-[640px] lg:px-16">
                   <Heading className="max-w-3xl font-display text-4xl leading-tight lg:text-6xl">
                     {slide.title}
                   </Heading>
@@ -100,7 +106,7 @@ export default function Hero({ slides }: { slides: HeroSlide[] }) {
                       {slide.cta}
                     </Link>
                   )}
-                </div>
+                </motion.div>
               </div>
             );
           })}
@@ -115,7 +121,7 @@ export default function Hero({ slides }: { slides: HeroSlide[] }) {
                 type="button"
                 aria-label={`Tampilkan slide ${index + 1}: ${slide.title}`}
                 aria-current={index === selectedIndex ? "true" : undefined}
-                onClick={() => emblaApi?.scrollTo(index)}
+                onClick={() => emblaApi?.scrollTo(index, !!reducedMotion)}
                 className="flex h-11 w-4 items-center justify-center"
               >
                 <span

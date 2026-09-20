@@ -1,5 +1,6 @@
 "use client";
 
+import { MotionSwap, MotionPresence, MotionFeedback } from "@/components/ui/motion";
 import { useCart } from "@/hooks/use-cart";
 import { useState, useRef } from "react";
 import Image from "next/image";
@@ -30,7 +31,7 @@ export default function ProductDetail({ product }: { product: PopularProduct }) 
     <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
       <div>
         <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-surface-container-high">
-          <Image src={images[imageIndex]} alt={`${product.title} — gambar ${imageIndex + 1}`} fill sizes="(min-width: 1024px) 50vw, 100vw" loading="eager" className="object-cover" />
+          <MotionSwap activeKey={imageIndex} className="absolute inset-0"><Image src={images[imageIndex]} alt={`${product.title} — gambar ${imageIndex + 1}`} fill sizes="(min-width: 1024px) 50vw, 100vw" loading="eager" className="object-cover" /></MotionSwap>
           {product.badge && <span className="absolute left-4 top-4 rounded-full bg-primary-container px-4 py-2 text-xs uppercase tracking-wider text-on-primary">{product.badge}</span>}
           <div className="absolute inset-x-4 bottom-4 flex justify-between">
             <Button variant="outline" size="icon" className="rounded-full bg-surface" aria-label="Gambar sebelumnya" disabled={imageIndex === 0} onClick={() => setImageIndex(imageIndex - 1)}>←</Button>
@@ -54,9 +55,9 @@ export default function ProductDetail({ product }: { product: PopularProduct }) 
           <div><p className="mb-2 text-sm">Jumlah</p><QuantityInput value={quantity} onValueChange={setQuantity} max={Math.min(99, product.stock)} /></div>
           <p className="text-right text-sm text-on-surface-variant">Subtotal<span className="mt-2 block text-xl font-semibold text-primary">{currency.format(product.price * quantity)}</span></p>
         </div>
-        <div className="mt-6 flex gap-3"><Button size="lg" disabled={adding || !color || product.stock < quantity} onClick={() => { if (addLock.current) return; addLock.current = true; setAdding(true); const ok = add(product.id, color.name, quantity); setCartMessage(ok ? "" : "Gagal menyimpan keranjang. Periksa izin penyimpanan browser."); if (ok) toast.success("Produk ditambahkan ke keranjang."); window.setTimeout(() => { addLock.current = false; setAdding(false); }, 450); }} className="flex-1" aria-describedby="purchase-status">{adding ? "Memproses…" : product.stock < 1 ? "Stok Habis" : "Tambah ke Keranjang"}</Button><Button variant="outline" size="icon" className="size-12 rounded-sm text-2xl" aria-label="Favoritkan produk" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}>{favorite ? "♥" : "♡"}</Button></div>
+        <div className="mt-6 flex gap-3"><Button size="lg" disabled={adding || !color || product.stock < quantity} onClick={() => { if (addLock.current) return; addLock.current = true; setAdding(true); const ok = add(product.id, color.name, quantity); setCartMessage(ok ? "" : "Gagal menyimpan keranjang. Periksa izin penyimpanan browser."); if (ok) toast.success("Produk ditambahkan ke keranjang."); window.setTimeout(() => { addLock.current = false; setAdding(false); }, 450); }} className="flex-1" aria-describedby="purchase-status">{adding ? "Memproses…" : product.stock < 1 ? "Stok Habis" : "Tambah ke Keranjang"}</Button><Button variant="outline" size="icon" className="size-12 rounded-sm text-2xl" aria-label="Favoritkan produk" aria-pressed={favorite} onClick={() => setFavorite(!favorite)}><MotionFeedback key={String(favorite)}>{favorite ? "♥" : "♡"}</MotionFeedback></Button></div>
         <p className="mt-4 text-sm text-secondary">{product.stock > 0 ? `${product.stock} tersedia` : "Belum tersedia"}</p>
-        {cartMessage && <Alert variant="destructive" role="alert" className="mt-3">{cartMessage}</Alert>}
+        <MotionPresence show={!!cartMessage}><Alert variant="destructive" role="alert" className="mt-3">{cartMessage}</Alert></MotionPresence>
         <p id="purchase-status" className="mt-3 text-xs leading-relaxed text-on-surface-variant">Pilih warna dan jumlah sebelum menambahkan ke keranjang.</p>
         <Accordion type="single" collapsible className="mt-8 border-t border-outline-variant">
           {[{ title: "Detail Produk", text: `${product.title} tersedia dalam ${product.colors.length} pilihan warna. Informasi bahan dan ukuran akan dilengkapi pada katalog resmi.` }, { title: "Panduan Perawatan", text: "Ikuti petunjuk pada label produk. Panduan perawatan khusus bahan akan tersedia bersama spesifikasi produk." }, { title: "Pengiriman & Pengembalian", text: "Pilihan pengiriman, estimasi waktu, dan ketentuan pengembalian akan tersedia saat layanan pembelian dibuka." }].map((item) => <AccordionItem key={item.title} value={item.title}><AccordionTrigger>{item.title}</AccordionTrigger><AccordionContent>{item.text}</AccordionContent></AccordionItem>)}

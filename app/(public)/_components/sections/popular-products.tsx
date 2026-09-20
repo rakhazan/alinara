@@ -1,5 +1,6 @@
 "use client";
 
+import { MotionSurface, MotionFeedback, MotionEntrance } from "@/components/ui/motion";
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,7 +25,7 @@ export function ProductCard({ product }: { product: PopularProduct }) {
   const [favorite, setFavorite] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
   return (
-    <Card className="overflow-hidden border-0">
+    <MotionSurface className="h-full"><Card className="h-full overflow-hidden border-0">
       <div className="relative aspect-[3/4] bg-surface-container-high">
         <Image
           src={product.image}
@@ -46,7 +47,7 @@ export function ProductCard({ product }: { product: PopularProduct }) {
           onClick={() => setFavorite(!favorite)}
           className="absolute right-2 top-2 rounded-full bg-surface text-primary shadow-sm lg:right-4 lg:top-4"
         >
-          <svg
+          <MotionFeedback key={String(favorite)} className="inline-flex"><svg
             aria-hidden="true"
             viewBox="0 0 24 24"
             className="size-6"
@@ -55,7 +56,7 @@ export function ProductCard({ product }: { product: PopularProduct }) {
             strokeWidth="1.5"
           >
             <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" />
-          </svg>
+          </svg></MotionFeedback>
         </Button>
       </div>
       <div className="p-3 lg:p-5">
@@ -94,7 +95,7 @@ export function ProductCard({ product }: { product: PopularProduct }) {
           )}
         </div>
       </div>
-    </Card>
+    </Card></MotionSurface>
   );
 }
 
@@ -137,9 +138,9 @@ export default function PopularProducts({
             {categories.map((item) => <TabsTrigger key={item} value={item}>{item}</TabsTrigger>)}
           </TabsList>
           {categories.map((item) => <TabsContent key={item} value={item}>
-            <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+            <MotionEntrance className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
               {products.filter((product) => item === "Semua" || product.category === item).map((product) => <ProductCard key={product.id} product={product} />)}
-            </div>
+            </MotionEntrance>
           </TabsContent>)}
         </Tabs>
       </div>

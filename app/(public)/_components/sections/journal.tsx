@@ -16,7 +16,7 @@ export default function Journal({ article }: { article: JournalArticle }) {
     >
       <div className="mx-auto max-w-[1920px] overflow-hidden rounded-3xl bg-primary-container p-6 text-on-primary shadow-sm lg:p-14">
         <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-16">
-          <div className="relative z-10">
+          <div data-scroll-reveal="rise" className="relative z-10">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-secondary-container">
               Alinara Styling Journal
             </p>
@@ -33,6 +33,8 @@ export default function Journal({ article }: { article: JournalArticle }) {
           <div className="grid grid-cols-3 gap-3 lg:gap-16">
             {article.images.map((image, index) => (
               <div
+                data-scroll-reveal="fade"
+                data-scroll-delay={index * 0.06}
                 key={`${image.src}-${index}`}
                 className="relative aspect-square overflow-hidden rounded-xl bg-surface-tint lg:aspect-3/4 lg:even:translate-y-1/2 lg:scale-200 lg:-rotate-12"
               >

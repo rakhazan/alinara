@@ -38,7 +38,7 @@ export default function Categories({ categories, className }: CategoriesProps) {
   return (
     <section aria-labelledby="categories-heading" className={cn("bg-surface px-4 py-14 text-on-surface lg:px-8 lg:py-20", className)}>
       <div className="mx-auto max-w-[1920px]">
-        <div className="mb-8 flex flex-col gap-5 lg:mb-14 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
+        <div data-scroll-reveal="rise" className="mb-8 flex flex-col gap-5 lg:mb-14 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
           <div>
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.16em] text-secondary lg:text-sm">Kategori Pilihan</p>
             <h2 id="categories-heading" className="font-display text-3xl leading-tight text-primary lg:text-5xl">Pilihan Mahakarya Sutra</h2>
@@ -47,7 +47,7 @@ export default function Categories({ categories, className }: CategoriesProps) {
         </div>
 
         <ul className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-4 lg:grid lg:grid-cols-5 lg:gap-6 lg:overflow-visible lg:pb-0">
-          {categories.map((category) => {
+          {categories.map((category, index) => {
             const content = (
               <>
                 <div className="relative aspect-[3/4] overflow-hidden bg-surface-container-high">
@@ -66,7 +66,7 @@ export default function Categories({ categories, className }: CategoriesProps) {
             const cardClass = "group flex h-full flex-col overflow-hidden rounded-2xl bg-surface-container-low";
 
             return (
-              <li key={category.id} className="w-[78%] shrink-0 snap-start sm:w-[40%] lg:w-auto lg:min-w-0">
+              <li data-scroll-reveal="rise" data-scroll-delay={index * 0.04} key={category.id} className="w-[78%] shrink-0 snap-start sm:w-[40%] lg:w-auto lg:min-w-0">
                 {category.href ? (
                   <Link href={category.href} className={cn(cardClass, "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary")}>{content}</Link>
                 ) : (

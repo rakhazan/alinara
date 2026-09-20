@@ -38,7 +38,7 @@ export default function FeaturedCollections({ collections }: { collections: Feat
               </div>
             </>;
             const className = tileVariants({ layout: index === 0 ? "hero" : "wide" });
-            return collection.href ? <Link key={collection.id} href={collection.href} className={`${className} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary`}>{content}</Link> : <article key={collection.id} className={className}>{content}</article>;
+            return collection.href ? <Link data-scroll-reveal="rise" data-scroll-delay={index * 0.05} key={collection.id} href={collection.href} className={`${className} focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary`}>{content}</Link> : <article data-scroll-reveal="rise" data-scroll-delay={index * 0.05} key={collection.id} className={className}>{content}</article>;
           })}
         </div>
       </div>
