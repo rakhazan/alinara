@@ -85,3 +85,40 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Small, interruptible interactions; content remains visible without JavaScript. */
+button:not(:disabled), summary, a { -webkit-tap-highlight-color: transparent; }
+button:not(:disabled), summary { cursor: pointer; }
+:where(a, button, input, select, textarea, summary):focus-visible {
+  outline: 2px solid var(--color-secondary);
+  outline-offset: 3px;
+}
+[id$="-heading"], #product-reviews { scroll-margin-top: 8rem; }
+.reveal-section { transition: opacity 600ms ease, transform 600ms cubic-bezier(.16, 1, .3, 1); }
+.reveal-pending { opacity: 0; transform: translateY(18px); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal-section { transition: none; }
+  .reveal-pending { opacity: 1; transform: none; }
+  .animate-marquee { animation: none; }
+}
+
+/* Shared primitive transitions; Radix keeps exiting content mounted. */
+.ui-overlay[data-state="open"] { animation: ui-fade-in 180ms ease both; }
+.ui-overlay[data-state="closed"] { animation: ui-fade-out 150ms ease both; }
+.ui-modal[data-state="open"], .ui-popup[data-state="open"] { animation: ui-enter 200ms cubic-bezier(.16,1,.3,1) both; }
+.ui-modal[data-state="closed"], .ui-popup[data-state="closed"] { animation: ui-exit 150ms ease both; }
+.ui-accordion[data-state="open"] { animation: ui-accordion-open 240ms ease both; }
+.ui-accordion[data-state="closed"] { animation: ui-accordion-close 200ms ease both; }
+.ui-collapsible[data-state="open"] { animation: ui-collapse-open 240ms ease both; }
+.ui-collapsible[data-state="closed"] { animation: ui-collapse-close 200ms ease both; }
+@keyframes ui-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ui-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes ui-enter { from { opacity: 0; scale: .97; } to { opacity: 1; scale: 1; } }
+@keyframes ui-exit { from { opacity: 1; scale: 1; } to { opacity: 0; scale: .98; } }
+@keyframes ui-accordion-open { from { height: 0; } to { height: var(--radix-accordion-content-height); } }
+@keyframes ui-accordion-close { from { height: var(--radix-accordion-content-height); } to { height: 0; } }
+@keyframes ui-collapse-open { from { height: 0; } to { height: var(--radix-collapsible-content-height); } }
+@keyframes ui-collapse-close { from { height: var(--radix-collapsible-content-height); } to { height: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  .ui-overlay, .ui-modal, .ui-popup, .ui-accordion, .ui-collapsible { animation-duration: 1ms !important; }
+}

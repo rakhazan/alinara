@@ -1,11 +1,9 @@
-import type { ReactNode, ComponentProps } from "react";
-import { cva } from "class-variance-authority";
-import { cn } from "@/lib/utils";
-
-const statusStyles = cva("inline-flex rounded-full px-3 py-1 text-xs font-medium", { variants: { status: { draft: "bg-surface-container-high text-on-surface-variant", published: "bg-secondary-container text-on-secondary-fixed" } } });
-export function StatusBadge({ status }: { status: "draft" | "published" }) { return <span className={statusStyles({ status })}>{status === "published" ? "Published" : "Draft"}</span>; }
+import type { ReactNode } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+export function StatusBadge({ status }: { status: "draft" | "published" }) { return <Badge variant={status === "published" ? "accent" : "muted"}>{status === "published" ? "Published" : "Draft"}</Badge>; }
 export function PageHeader({ title, description, action }: { title: string; description: string; action?: ReactNode }) { return <div className="mb-8 flex flex-wrap items-start justify-between gap-4"><div><p className="mb-2 text-xs uppercase tracking-[.18em] text-secondary">Alinara Studio</p><h1 className="font-display text-3xl text-primary">{title}</h1><p className="mt-3 max-w-xl text-sm text-on-surface-variant">{description}</p></div>{action}</div>; }
-export function StatCard({ label, value, note }: { label: string; value: number; note: string }) { return <div className="rounded-2xl border border-outline-variant/50 bg-surface-container-lowest p-6"><p className="text-sm text-on-surface-variant">{label}</p><p className="mt-4 font-display text-4xl text-primary">{value}</p><p className="mt-3 text-xs text-secondary">{note}</p></div>; }
-export function Input({ className, ...props }: ComponentProps<"input">) { return <input {...props} className={cn("w-full rounded-lg border border-outline-variant bg-surface-container-lowest px-3 py-2.5 text-sm focus-visible:outline-2 focus-visible:outline-secondary", className)} />; }
-export function FormField({ label, children }: { label: string; children: ReactNode }) { return <label className="grid gap-2 text-sm font-medium text-primary">{label}{children}</label>; }
-export function DataTable<T extends { id: string }>({ rows, columns, empty = "Belum ada data." }: { rows: T[]; columns: { label: string; render: (row: T) => ReactNode }[]; empty?: string }) { return <div className="overflow-x-auto rounded-xl border border-outline-variant/60 bg-surface-container-lowest"><table className="w-full text-left text-sm"><thead className="bg-surface-container-low text-xs uppercase tracking-wide text-on-surface-variant"><tr>{columns.map((column) => <th key={column.label} scope="col" className="px-5 py-4">{column.label}</th>)}</tr></thead><tbody className="divide-y divide-outline-variant/40">{rows.map((row) => <tr key={row.id} className="hover:bg-surface/70">{columns.map((column) => <td key={column.label} className="px-5 py-4">{column.render(row)}</td>)}</tr>)}{!rows.length && <tr><td colSpan={columns.length} className="p-12 text-center text-on-surface-variant">{empty}</td></tr>}</tbody></table></div>; }
+export function StatCard({ label, value, note }: { label: string; value: number; note: string }) { return <Card className="p-6"><p className="text-sm text-on-surface-variant">{label}</p><p className="mt-4 font-display text-4xl text-primary">{value}</p><p className="mt-3 text-xs text-secondary">{note}</p></Card>; }
+export { Input } from "@/components/ui/input";
+export { FormField } from "@/components/ui/field";
+export { DataTable } from "@/components/ui/data-table";

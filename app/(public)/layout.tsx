@@ -1,3 +1,7 @@
+import Reveal from "@/components/providers/reveal";
 import Navbar from "@/components/layouts/navbar";
 import Footer from "@/components/layouts/footer";
-export default function PublicLayout({ children }: { children: React.ReactNode }) { return <><Navbar /><main className="grow">{children}</main><Footer /></>; }
+import CatalogProvider from "@/components/providers/catalog-provider";
+import { getProducts } from "@/lib/server/catalog";
+export const dynamic = "force-dynamic";
+export default async function PublicLayout({ children }: { children: React.ReactNode }) { return <CatalogProvider products={await getProducts()}><Navbar /><Reveal><main className="grow">{children}</main></Reveal><Footer /></CatalogProvider>; }

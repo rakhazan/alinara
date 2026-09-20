@@ -1,5 +1,6 @@
 "use client";
-import { useSyncExternalStore } from "react";
+import { useContext, useSyncExternalStore } from "react";
+import { AdminContext } from "@/components/providers/admin-provider";
 import { seed, type AdminRecord } from "./data";
 const KEY = "alinara-admin-v1";
 const EVENT = "alinara-admin-update";
@@ -13,6 +14,7 @@ function parse(raw: string): Record<string, AdminRecord[]> {
   } catch { return seed; }
 }
 export function useAdminData() {
+  const remote = useContext(AdminContext);
   const data = parse(useSyncExternalStore(subscribe, snapshot, () => initial));
   function save(section: string, record: AdminRecord) {
     const current = parse(snapshot());
@@ -20,6 +22,6 @@ export function useAdminData() {
     return persist({ ...current, [section]: records.some((item) => item.id === record.id) ? records.map((item) => item.id === record.id ? record : item) : [record, ...records] });
   }
   function remove(section: string, id: string) { const current = parse(snapshot()); return persist({ ...current, [section]: current[section].filter((item) => item.id !== id) }); }
-  return { data, save, remove };
+  return remote ?? { data, save, remove };
 }
 function persist(data: Record<string, AdminRecord[]>) { try { localStorage.setItem(KEY, JSON.stringify(data)); window.dispatchEvent(new Event(EVENT)); return true; } catch { return false; } }

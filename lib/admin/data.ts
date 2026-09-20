@@ -1,7 +1,7 @@
 export type Field = { key: string; label: string; type?: "text" | "number" | "textarea" | "url"; required?: boolean };
 export type AdminRecord = { id: string; title: string; status: "draft" | "published"; updatedAt: string; [key: string]: string };
 export const sections: Record<string, { title: string; description: string; fields: Field[] }> = {
-  products: { title: "Produk", description: "Kelola katalog, harga, dan persediaan produk.", fields: [{ key: "price", label: "Harga (Rp)", type: "number", required: true }, { key: "stock", label: "Stok", type: "number", required: true }, { key: "category", label: "Kategori" }, { key: "image", label: "Path / URL gambar" }, { key: "description", label: "Deskripsi", type: "textarea" }] },
+  products: { title: "Produk", description: "Kelola katalog, harga, dan persediaan produk.", fields: [{ key: "price", label: "Harga (Rp)", type: "number", required: true }, { key: "stock", label: "Stok", type: "number", required: true }, { key: "category", label: "Kategori" }, { key: "colors", label: 'Warna JSON: [{"name":"Ivory","value":"#faf7f2"}]', type: "textarea", required: true }, { key: "image", label: "Path / URL gambar" }, { key: "description", label: "Deskripsi", type: "textarea" }] },
   categories: { title: "Kategori", description: "Atur kategori untuk memudahkan penjelajahan koleksi.", fields: [{ key: "description", label: "Deskripsi", type: "textarea" }, { key: "image", label: "Path / URL gambar" }] },
   collections: { title: "Koleksi", description: "Kurasi koleksi unggulan dan cerita di baliknya.", fields: [{ key: "description", label: "Deskripsi", type: "textarea" }, { key: "image", label: "Path / URL gambar" }, { key: "href", label: "Tautan tujuan" }] },
   banners: { title: "Hero & Banner", description: "Susun pesan pembuka dan kampanye halaman utama.", fields: [{ key: "description", label: "Deskripsi", type: "textarea" }, { key: "imageSm", label: "Gambar mobile" }, { key: "imageLg", label: "Gambar desktop" }, { key: "cta", label: "Label CTA" }, { key: "href", label: "Tautan CTA" }] },
@@ -11,7 +11,7 @@ export const sections: Record<string, { title: string; description: string; fiel
 };
 export const seed: Record<string, AdminRecord[]> = Object.fromEntries(Object.keys(sections).map((key) => [key, []]));
 const record = (id: string, title: string, extra: Record<string, string> = {}): AdminRecord => ({ id, title, status: "draft", updatedAt: "2026-09-15T00:00:00.000Z", ...extra });
-seed.products = [record("p1", "Mulberry Silk Pashmina", { price: "245000", stock: "24", category: "Pashmina" }), record("p2", "Voal Lasercut Series", { price: "189000", stock: "18", category: "Square Scarves" })];
+seed.products = [record("p1", "Mulberry Silk Pashmina", { price: "245000", stock: "24", category: "Pashmina", colors: '[{"name":"Ivory","value":"#faf7f2"}]' }), record("p2", "Voal Lasercut Series", { price: "189000", stock: "18", category: "Square Scarves", colors: '[{"name":"Ivory","value":"#faf7f2"}]' })];
 seed.categories = [record("c1", "Pashmina"), record("c2", "Square Scarves")];
 seed.collections = [record("f1", "The Signature Silk", { description: "Kelembutan dalam setiap helai." })];
 seed.banners = [record("b1", "Welcome to Alinara Butique", { imageSm: "/images/hero-placeholder-sm.svg", imageLg: "/images/hero-placeholder-lg.svg" })];

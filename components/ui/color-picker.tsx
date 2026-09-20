@@ -1,0 +1,4 @@
+"use client";
+import { Radio, RadioGroup } from "./radio";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip";
+export function ColorPicker({ colors, value, onValueChange, label = "Pilihan warna" }: { colors: { name: string; value: string }[]; value?: string; onValueChange: (value: string) => void; label?: string }) { return <RadioGroup aria-label={label} value={value} onValueChange={onValueChange} className="flex flex-wrap gap-2">{colors.map((color) => <Tooltip key={color.name}><TooltipTrigger asChild><Radio value={color.name} aria-label={color.name} className="size-10 border-transparent p-1 data-[state=checked]:border-primary"><span className="size-7 rounded-full border border-outline-variant" style={{ backgroundColor: color.value }} /></Radio></TooltipTrigger><TooltipContent>{color.name}</TooltipContent></Tooltip>)}</RadioGroup>; }

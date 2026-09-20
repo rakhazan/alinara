@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { MenuSquareIcon, XIcon } from "@hugeicons/core-free-icons";
 import { HIcon } from "@/components/ui/icon";
 import Button from "@/components/ui/button";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogTrigger, DialogClose } from "@/components/ui/dialog";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import styles from "./sidebar.module.css";
 
 export type NavigationItem = {
@@ -20,9 +22,9 @@ const navigation: NavigationItem[] = [
   {
     title: "Kategori Pilihan",
     detail: "Temukan gaya Anda",
-    href: "/#categories-heading",
+    href: "/products",
     children: [
-      { title: "Semua Kategori", href: "/#categories-heading" },
+      { title: "Semua Kategori", href: "/products" },
       { title: "Koleksi Signature", href: "/#featured-heading" },
     ],
   },
@@ -65,7 +67,6 @@ function SidebarNavigationItem({ item, index, onNavigate, nested = false }: {
   nested?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const submenuId = useId();
   const hasChildren = Boolean(item.children?.length);
   const rowClass = "group flex w-full items-center gap-4 border-b border-outline-variant/60 py-4 text-left focus-visible:outline-2 focus-visible:outline-secondary lg:py-5";
   const label = <>
@@ -79,96 +80,44 @@ function SidebarNavigationItem({ item, index, onNavigate, nested = false }: {
 
   return (
     <li className={nested ? undefined : styles.item} style={{ "--item-index": index } as CSSProperties}>
+      <Collapsible open={expanded} onOpenChange={setExpanded}>
       {hasChildren ? (
-        <button type="button" className={rowClass} aria-expanded={expanded} aria-controls={submenuId} onClick={() => setExpanded(!expanded)}>{label}</button>
+        <CollapsibleTrigger className={rowClass}>{label}</CollapsibleTrigger>
       ) : item.href ? (
         <Link href={item.href} onClick={onNavigate} className={rowClass}>{label}</Link>
       ) : null}
       {hasChildren && (
-        <div id={submenuId} className={styles.submenu} data-expanded={expanded} inert={!expanded} aria-hidden={!expanded}>
+        <CollapsibleContent>
           <div className={styles.submenuInner}>
             <ul className="ml-4 border-l border-outline-variant pl-4">
               {item.href && !item.children?.some((child) => child.href === item.href) && <li><Link href={item.href} onClick={onNavigate} className={rowClass}>Lihat semua {item.title} <span aria-hidden="true">↗</span></Link></li>}
               {item.children?.map((child, childIndex) => <SidebarNavigationItem key={`${child.title}-${childIndex}`} item={child} index={childIndex} onNavigate={onNavigate} nested />)}
             </ul>
           </div>
-        </div>
+        </CollapsibleContent>
       )}
+      </Collapsible>
     </li>
   );
 }
 
 export default function Sidebar() {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const previousOverflow = useRef("");
-  const scrollLocked = useRef(false);
-  useEffect(
-    () => () => {
-      if (scrollLocked.current)
-        document.body.style.overflow = previousOverflow.current;
-    },
-    [],
-  );
-  const [phase, setPhase] = useState<"closed" | "open" | "closing">("closed");
-
-  function open() {
-    if (!dialogRef.current || dialogRef.current.open) return;
-    previousOverflow.current = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    scrollLocked.current = true;
-    setPhase("open");
-    dialogRef.current.showModal();
-  }
-
-  function close() {
-    if (phase === "open") setPhase("closing");
-  }
-
-  function finishClose() {
-    dialogRef.current?.close();
-    document.body.style.overflow = previousOverflow.current;
-    scrollLocked.current = false;
-    setPhase("closed");
-    triggerRef.current?.focus({ preventScroll: true });
-  }
+  const [open, setOpen] = useState(false);
+  function close() { setOpen(false); }
 
   return (
-    <>
-      <Button
-        ref={triggerRef}
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild><Button
         variant="ghost"
         size="icon"
-        onClick={open}
         aria-label="Buka menu navigasi"
         aria-haspopup="dialog"
-        aria-expanded={phase !== "closed"}
-        aria-controls="navigation-sidebar"
         className="-ml-2 rounded-full"
       >
         <HIcon icon={MenuSquareIcon} className="size-5 lg:size-6" />
-      </Button>
-      <dialog
-        ref={dialogRef}
-        id="navigation-sidebar"
-        aria-labelledby="sidebar-title"
-        className={styles.dialog}
-        data-phase={phase}
-        onCancel={(event) => {
-          event.preventDefault();
-          close();
-        }}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) close();
-        }}
-      >
-        <div
-          className={styles.panel}
-          onAnimationEnd={(event) => {
-            if (event.target === event.currentTarget && phase === "closing")
-              finishClose();
-          }}
-        >
+      </Button></DialogTrigger>
+      <DialogContent variant="custom" className={styles.panel}>
+        <DialogDescription className="sr-only">Jelajahi koleksi, inspirasi gaya, dan komunitas Alinara.</DialogDescription>
           <aside aria-hidden="true" className={styles.spine}>
             <span>ALINARA — THE ART OF EVERYDAY</span>
             <span>EST. WITH LOVE</span>
@@ -179,17 +128,15 @@ export default function Sidebar() {
                 <p className="text-[10px] uppercase tracking-[0.25em] text-secondary">
                   A little world of Alinara
                 </p>
-                <h2
-                  id="sidebar-title"
+                <DialogTitle
                   className="mt-2 font-display text-2xl tracking-wider text-primary"
                 >
                   Jelajahi Alinara
-                </h2>
+                </DialogTitle>
               </div>
-              <Button
+              <DialogClose asChild><Button
                 variant="outline"
                 size="icon"
-                onClick={close}
                 aria-label="Tutup menu navigasi"
                 className="shrink-0 rounded-full"
               >
@@ -198,7 +145,7 @@ export default function Sidebar() {
                   aria-hidden="true"
                   className="text-2xl font-normal"
                 />
-              </Button>
+              </Button></DialogClose>
             </div>
             <nav aria-label="Navigasi utama" className={styles.navigation}>
               <ul>
@@ -221,8 +168,7 @@ export default function Sidebar() {
               <span>Indonesia</span>
             </div>
           </div>
-        </div>
-      </dialog>
-    </>
+      </DialogContent>
+    </Dialog>
   );
 }

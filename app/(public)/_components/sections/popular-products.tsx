@@ -4,22 +4,15 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Button from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { ColorPicker } from "@/components/ui/color-picker";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { HIcon } from "@/components/ui/icon";
 import { ArrowRight02Icon } from "@hugeicons/core-free-icons";
 
-export type PopularProduct = {
-  id: string;
-  title: string;
-  category: string;
-  image: string;
-  price: number;
-  rating: number;
-  reviewCount: number;
-  badge?: string;
-  href?: string;
-  colors: { name: string; value: string }[];
-};
+export type { Product as PopularProduct } from "@/lib/catalog/types";
+import type { Product as PopularProduct } from "@/lib/catalog/types";
 
 const rupiah = new Intl.NumberFormat("id-ID", {
   style: "currency",
@@ -27,11 +20,11 @@ const rupiah = new Intl.NumberFormat("id-ID", {
   maximumFractionDigits: 0,
 });
 
-function ProductCard({ product }: { product: PopularProduct }) {
+export function ProductCard({ product }: { product: PopularProduct }) {
   const [favorite, setFavorite] = useState(false);
   const [selectedColor, setSelectedColor] = useState(0);
   return (
-    <article className="overflow-hidden rounded-2xl bg-surface-container-lowest shadow-sm">
+    <Card className="overflow-hidden border-0">
       <div className="relative aspect-[3/4] bg-surface-container-high">
         <Image
           src={product.image}
@@ -41,9 +34,9 @@ function ProductCard({ product }: { product: PopularProduct }) {
           className="object-cover"
         />
         {product.badge && (
-          <span className="absolute left-2 top-2 max-w-[calc(100%-4rem)] rounded-full bg-primary-container px-3 py-2 text-[10px] uppercase tracking-wide text-on-primary lg:left-4 lg:top-4 lg:text-xs">
+          <Badge className="absolute left-2 top-2 max-w-[calc(100%-4rem)] rounded-full bg-primary-container px-3 py-2 text-[10px] uppercase tracking-wide text-on-primary lg:left-4 lg:top-4 lg:text-xs">
             {product.badge}
-          </span>
+          </Badge>
         )}
         <Button
           variant="ghost"
@@ -71,7 +64,7 @@ function ProductCard({ product }: { product: PopularProduct }) {
             ★{" "}
           </span>
           <span className="font-semibold text-primary">
-            {product.rating.toFixed(1)}
+            {product.reviewCount ? product.rating.toFixed(1) : "Baru"}
           </span>
           <span className="sr-only"> dari 5, </span> ({product.reviewCount}
           <span className="sr-only"> ulasan</span>)
@@ -91,49 +84,17 @@ function ProductCard({ product }: { product: PopularProduct }) {
         >
           {product.colors[selectedColor]?.name}
         </p>
-        <div
-          className="flex flex-wrap gap-1"
-          role="group"
-          aria-label={`Warna ${product.title}`}
-        >
-          {product.colors.map((color, index) => (
-            <button
-              key={color.name}
-              type="button"
-              aria-label={color.name}
-              aria-pressed={selectedColor === index}
-              onClick={() => setSelectedColor(index)}
-              className="flex size-9 items-center justify-center rounded-full focus-visible:outline-2 focus-visible:outline-primary"
-            >
-              <span
-                className={cn(
-                  "size-5 rounded-full border border-outline-variant",
-                  selectedColor === index &&
-                    "ring-1 ring-primary ring-offset-2",
-                )}
-                style={{ backgroundColor: color.value }}
-              />
-            </button>
-          ))}
-        </div>
+        <ColorPicker colors={product.colors} value={product.colors[selectedColor]?.name} onValueChange={(value) => setSelectedColor(product.colors.findIndex((color) => color.name === value))} label={`Warna ${product.title}`} />
         <div className="mt-4 flex flex-wrap items-center justify-between gap-2">
           <p className="text-sm font-semibold text-primary lg:text-xl">
             {rupiah.format(product.price)}
           </p>
           {product.href && (
-            <Link href={product.href} aria-label={`Lihat ${product.title}`}>
-              <Button
-                variant={"ghost"}
-                size={"icon-sm"}
-                className="rounded-full"
-              >
-                <HIcon icon={ArrowRight02Icon} className="size-5" />
-              </Button>
-            </Link>
+            <Button asChild variant="ghost" size="icon-sm" className="rounded-full"><Link href={product.href} aria-label={`Lihat ${product.title}`}><HIcon icon={ArrowRight02Icon} className="size-5" /></Link></Button>
           )}
         </div>
       </div>
-    </article>
+    </Card>
   );
 }
 
@@ -171,33 +132,16 @@ export default function PopularProducts({
             {visibleProducts.length} Karya Pilihan
           </p>
         </div>
-        <div
-          role="group"
-          aria-label="Filter kategori produk"
-          className="my-8 flex flex-wrap justify-center gap-2"
-        >
-          {categories.map((item) => (
-            <Button
-              key={item}
-              variant="ghost"
-              aria-pressed={category === item}
-              onClick={() => setCategory(item)}
-              className={cn(
-                "rounded-none border-b-2",
-                category === item
-                  ? "border-secondary text-primary"
-                  : "border-transparent text-on-surface-variant",
-              )}
-            >
-              {item}
-            </Button>
-          ))}
-        </div>
-        <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
-          {visibleProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <Tabs value={category} onValueChange={setCategory} className="mt-8">
+          <TabsList aria-label="Kategori produk" className="justify-center">
+            {categories.map((item) => <TabsTrigger key={item} value={item}>{item}</TabsTrigger>)}
+          </TabsList>
+          {categories.map((item) => <TabsContent key={item} value={item}>
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
+              {products.filter((product) => item === "Semua" || product.category === item).map((product) => <ProductCard key={product.id} product={product} />)}
+            </div>
+          </TabsContent>)}
+        </Tabs>
       </div>
     </section>
   );

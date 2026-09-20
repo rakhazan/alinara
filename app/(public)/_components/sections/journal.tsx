@@ -1,3 +1,4 @@
+import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 import Image from "next/image";
 
 export type JournalArticle = {
@@ -47,10 +48,11 @@ export default function Journal({ article }: { article: JournalArticle }) {
           </div>
         </div>
         {article.steps.length > 0 && (
-          <details className="group mt-8 lg:mt-12">
-            <summary className="w-fit cursor-pointer rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-on-secondary hover:bg-on-secondary-fixed-variant focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-primary">
+          <Collapsible className="group mt-8 lg:mt-12">
+            <CollapsibleTrigger className="w-fit cursor-pointer rounded-lg bg-secondary px-5 py-3 text-sm font-semibold text-on-secondary hover:bg-on-secondary-fixed-variant focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-on-primary">
               Lihat Panduan Penuh
-            </summary>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
             <ol className="mt-8 grid gap-6 border-t border-on-primary/20 pt-8 md:grid-cols-3">
               {article.steps.map((step, index) => (
                 <li key={step.title}>
@@ -64,7 +66,8 @@ export default function Journal({ article }: { article: JournalArticle }) {
                 </li>
               ))}
             </ol>
-          </details>
+          </CollapsibleContent>
+          </Collapsible>
         )}
       </div>
     </section>

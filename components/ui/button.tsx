@@ -1,3 +1,6 @@
+"use client";
+
+import { Slot } from "radix-ui";
 import type { ComponentPropsWithRef } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -24,7 +27,7 @@ const sizes = {
 } as const;
 
 export const buttonVariants = cva(
-  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-sm border font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-sm border font-semibold transition-[color,background-color,border-color,transform] duration-200 enabled:active:scale-[0.97] motion-reduce:transform-none motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: variants,
@@ -38,20 +41,22 @@ export const buttonVariants = cva(
 );
 
 export type ButtonProps = ComponentPropsWithRef<"button"> &
-  VariantProps<typeof buttonVariants>;
+  VariantProps<typeof buttonVariants> & { asChild?: boolean };
 
 /** Icon-only buttons must include an accessible name via aria-label. */
 export function Button({
+  asChild = false,
   variant,
   size,
   type = "button",
   className,
   ...props
 }: ButtonProps) {
+  const Component = asChild ? Slot.Root : "button";
   return (
-    <button
+    <Component
       {...props}
-      type={type}
+      {...(!asChild ? { type } : {})}
       className={cn(buttonVariants({ variant, size }), className)}
     />
   );

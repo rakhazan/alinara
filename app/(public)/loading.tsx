@@ -1,0 +1,2 @@
+import { Skeleton } from "@/components/ui/loader";
+export default function Loading() { return <div role="status" aria-label="Memuat halaman" className="mx-auto w-full max-w-7xl px-5 py-12"><Skeleton className="h-10 w-2/3" /><div className="mt-8 grid grid-cols-2 gap-5 lg:grid-cols-4">{[1, 2, 3, 4].map((item) => <Skeleton key={item} className="aspect-[3/4] rounded-2xl" />)}</div><span className="sr-only">Sedang memuat…</span></div>; }

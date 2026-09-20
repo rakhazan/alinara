@@ -1,3 +1,4 @@
+import UIProvider from "@/components/providers/ui-provider";
 import type { Metadata } from "next";
 import { Montserrat, Kalnia } from "next/font/google";
 import "./globals.css";
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${montserrat.variable} ${kalnia.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col relative">
-        {children}
+        <UIProvider>{children}</UIProvider>
       </body>
     </html>
   );
